@@ -145,8 +145,8 @@ const Pane = memo(
           console.log('panby', xMovement, yMovement);
 
           if (panBy({ x: xMovement, y: yMovement })) {
+              // TODO: when auto panning, update the selection
               /* updateNodes(lastPos.current as XYPosition); */
-              console.log("wtf why not pan");
           }
       }
       autoPanId.current = requestAnimationFrame(autoPan);
@@ -184,17 +184,15 @@ const Pane = memo(
       }
 
 
-        if (!autoPanStarted.current) {
-            autoPanStarted.current = true;
-          autoPan();
-      }
+        /* if (!autoPanStarted.current) {
+         *     autoPanStarted.current = true;
+         *     autoPan();
+         * } */
 
       const mousePos = getEventPosition(event, containerBounds.current);
       mousePosition.current = mousePos;
 
       updateSelection(mousePos);
-
-
     };
 
     const onMouseUp = (event: ReactMouseEvent) => {
