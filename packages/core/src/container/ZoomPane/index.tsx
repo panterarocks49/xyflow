@@ -223,6 +223,7 @@ const ZoomPane = ({
   useEffect(() => {
     if (d3Zoom) {
       d3Zoom.on('start', (event: D3ZoomEvent<HTMLDivElement, any>) => {
+          console.log("zoom start", event);
         if (!event.sourceEvent || event.sourceEvent.internal) {
           return null;
         }
@@ -247,10 +248,13 @@ const ZoomPane = ({
 
   useEffect(() => {
     if (d3Zoom) {
-      if (userSelectionActive && !isZoomingOrPanning.current) {
-        d3Zoom.on('zoom', null);
-      } else if (!userSelectionActive) {
+      if (false) {
+          // userSelectionActive && !isZoomingOrPanning.current
+          d3Zoom.on('zoom', null);
+      } else // if (!userSelectionActive)
+      {
         d3Zoom.on('zoom', (event: D3ZoomEvent<HTMLDivElement, any>) => {
+            console.log("zoom zoom");
           const { onViewportChange } = store.getState();
           store.setState({ transform: [event.transform.x, event.transform.y, event.transform.k] });
 
@@ -267,11 +271,12 @@ const ZoomPane = ({
         });
       }
     }
-  }, [userSelectionActive, d3Zoom, onMove, panOnDrag, onPaneContextMenu]);
+  }, [d3Zoom, onMove, panOnDrag, onPaneContextMenu]);
 
   useEffect(() => {
     if (d3Zoom) {
       d3Zoom.on('end', (event: D3ZoomEvent<HTMLDivElement, any>) => {
+          console.log("zoom end");
         if (!event.sourceEvent || event.sourceEvent.internal) {
           return null;
         }
@@ -310,6 +315,7 @@ const ZoomPane = ({
   useEffect(() => {
     if (d3Zoom) {
       d3Zoom.filter((event: any) => {
+          console.log("zoom filter");
         const zoomScroll = zoomActivationKeyPressed || zoomOnScroll;
         const pinchZoom = zoomOnPinch && event.ctrlKey;
 
@@ -328,9 +334,9 @@ const ZoomPane = ({
         }
 
         // during a selection we prevent all other interactions
-        if (userSelectionActive) {
-          return false;
-        }
+          if (userSelectionActive) {
+              return false;
+          }
 
         // if zoom on double click is disabled, we prevent the double click event
         if (!zoomOnDoubleClick && event.type === 'dblclick') {
@@ -382,8 +388,8 @@ const ZoomPane = ({
       });
     }
   }, [
-    userSelectionActive,
-    d3Zoom,
+      userSelectionActive,
+      d3Zoom,
     zoomOnScroll,
     zoomOnPinch,
     panOnScroll,
